@@ -1,117 +1,123 @@
 <!DOCTYPE html>
-
-<style>
-  .data-input:invalid {
-      border: solid 1px red;
-  }
-</style>
-
-<script src="lib/chartnew.js/ChartNew.js"></script>
-<script src="lib/chartnew.js/Add-ins/format.js"></script>
-
-<script>
-  var module = module || {};
-</script>
-
-<script src="lib/percentile/index.js"></script>
-
-<script>
-  defCanvasWidth = 1200;
-  defCanvasHeight = 600;
-
-  var defaultXAxisLabels = ["-3", "-2", "-1", "0", "1", "2", "3"];
-
-  function clone(data)
-  {
-    return JSON.parse(JSON.stringify(data))
-  }
-
-  var mydata1 = {
-    labels: clone(defaultXAxisLabels),
-    xBegin: -3,
-    xEnd: 3,
-    datasets: [
-      {
-        strokeColor: "rgba(220,220,220,1)",
-        data: [],
-        xPos: [],
-        title: "Normal distribution",
-      },
-    ],
-  };
-  var gauss_var = 1;
-  var gauss_mean = 0;
-
-  function calculate(data) {
-    // PERCENTILE CALC
-    const deviationsAndPercentages = [
-      { stdDev: -3, pc: 0.1 },
-      { stdDev: -2, pc: 50 - 34.1 - 13.6 },
-      { stdDev: -1, pc: 50 - 34.1 },
-      { stdDev: 0, pc: 50 },
-      { stdDev: 1, pc: 50 + 34.1 },
-      { stdDev: 2, pc: 50 + 34.1 + 13.6 },
-      { stdDev: 3, pc: 99.9 },
-    ];
-
-    const percentages = deviationsAndPercentages.map((dap) => dap.pc);
-    const percentilesByStdDev = percentile(
-      percentages, // calculates percentiles for standard deviation -3 sigma thru to +3 sigma
-      data
-    );
-
-    // y-axis scaling
-    // median / 0.4
-    var median = percentilesByStdDev[3];
-    var yAxisScale = median / 0.4;
-
-    var nbiter = 400;
-    for (var i = 0; i < nbiter; i++) {
-      mydata1.datasets[0].xPos[i] =
-        mydata1.xBegin + (i * (mydata1.xEnd - mydata1.xBegin)) / nbiter;
-      mydata1.datasets[0].data[i] =
-        (1 / (gauss_var * Math.sqrt(2 * Math.PI))) *
-        Math.exp(
-          -(
-            (mydata1.datasets[0].xPos[i] - gauss_mean) *
-            (mydata1.datasets[0].xPos[i] - gauss_mean)
-          ) /
-            (2 * gauss_var)
-        );
-
-      mydata1.datasets[0].data[i] = mydata1.datasets[0].data[i] * yAxisScale;
-    }
-
-    // Adjust x-axis labels to show percentile values:
-    var sigmaSymbol = "σ";
-    for (var p = 0; p < percentilesByStdDev.length; p++) {
-      mydata1.labels[p] =
-      defaultXAxisLabels[p] + sigmaSymbol + "\n" + percentilesByStdDev[p];
-    }
-
-    opt1.yAxisMinimumInterval = 0.02 * yAxisScale;
-  }
-
-  var opt1 = {
-    canvasBorders: true,
-    canvasBordersWidth: 3,
-    canvasBordersColor: "black",
-    graphTitle: "Normal distribution",
-    legend: true,
-    datasetFill: false,
-    annotateDisplay: true,
-    pointDot: false,
-    animationLeftToRight: true,
-    animationEasing: "linear",
-    yAxisMinimumInterval: 0.02,
-    graphTitleFontSize: 18,
-  };
-</script>
-
 <html>
-  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
   <head>
     <title>Percentizer</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <!-- Disable browser caching, in case need to release new versions -->
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <style>
+      .data-input:invalid {
+        border: solid 1px red;
+      }
+    </style>
+
+    <script src="lib/chartnew.js/ChartNew.js"></script>
+    <script src="lib/chartnew.js/Add-ins/format.js"></script>
+
+    <script>
+      var module = module || {};
+    </script>
+
+    <script src="lib/percentile/index.js"></script>
+
+    <script>
+      defCanvasWidth = 1200;
+      defCanvasHeight = 600;
+
+      var defaultXAxisLabels = ["-3", "-2", "-1", "0", "1", "2", "3"];
+
+      function clone(data) {
+        return JSON.parse(JSON.stringify(data));
+      }
+
+      var mydata1 = {
+        labels: clone(defaultXAxisLabels),
+        xBegin: -3,
+        xEnd: 3,
+        datasets: [
+          {
+            strokeColor: "rgba(220,220,220,1)",
+            data: [],
+            xPos: [],
+            title: "Normal distribution",
+          },
+        ],
+      };
+      var gauss_var = 1;
+      var gauss_mean = 0;
+
+      function calculate(data) {
+        // PERCENTILE CALC
+        const deviationsAndPercentages = [
+          { stdDev: -3, pc: 0.1 },
+          { stdDev: -2, pc: 50 - 34.1 - 13.6 },
+          { stdDev: -1, pc: 50 - 34.1 },
+          { stdDev: 0, pc: 50 },
+          { stdDev: 1, pc: 50 + 34.1 },
+          { stdDev: 2, pc: 50 + 34.1 + 13.6 },
+          { stdDev: 3, pc: 99.9 },
+        ];
+
+        const percentages = deviationsAndPercentages.map((dap) => dap.pc);
+        const percentilesByStdDev = percentile(
+          percentages, // calculates percentiles for standard deviation -3 sigma thru to +3 sigma
+          data
+        );
+
+        // y-axis scaling
+        // median / 0.4
+        var median = percentilesByStdDev[3];
+        var yAxisScale = median / 0.4;
+
+        var nbiter = 400;
+        for (var i = 0; i < nbiter; i++) {
+          mydata1.datasets[0].xPos[i] =
+            mydata1.xBegin + (i * (mydata1.xEnd - mydata1.xBegin)) / nbiter;
+          mydata1.datasets[0].data[i] =
+            (1 / (gauss_var * Math.sqrt(2 * Math.PI))) *
+            Math.exp(
+              -(
+                (mydata1.datasets[0].xPos[i] - gauss_mean) *
+                (mydata1.datasets[0].xPos[i] - gauss_mean)
+              ) /
+                (2 * gauss_var)
+            );
+
+          mydata1.datasets[0].data[i] =
+            mydata1.datasets[0].data[i] * yAxisScale;
+        }
+
+        // Adjust x-axis labels to show percentile values:
+        var sigmaSymbol = "σ";
+        for (var p = 0; p < percentilesByStdDev.length; p++) {
+          mydata1.labels[p] =
+            defaultXAxisLabels[p] + sigmaSymbol + "\n" + percentilesByStdDev[p];
+        }
+
+        opt1.yAxisMinimumInterval = 0.02 * yAxisScale;
+      }
+
+      var opt1 = {
+        canvasBorders: true,
+        canvasBordersWidth: 3,
+        canvasBordersColor: "black",
+        graphTitle: "Normal distribution",
+        legend: true,
+        datasetFill: false,
+        annotateDisplay: true,
+        pointDot: false,
+        animationLeftToRight: true,
+        animationEasing: "linear",
+        yAxisMinimumInterval: 0.02,
+        graphTitleFontSize: 18,
+      };
+    </script>
   </head>
   <body>
     <center>
@@ -144,8 +150,7 @@
       </script>
 
       <script>
-        function setValidationMessage(message)
-        {
+        function setValidationMessage(message) {
           getDataInputElement().setCustomValidity(message);
         }
 
@@ -154,8 +159,7 @@
           setValidationMessage("");
           for (var i = 0; i < numbersAsText.length; i++) {
             var datum = parseInt(numbersAsText[i], 10);
-            if (isNaN(datum))
-            {
+            if (isNaN(datum)) {
               setValidationMessage(`${data[i]} is not a number!`);
               return data;
             }
@@ -164,8 +168,7 @@
           return data;
         }
 
-        function getDataInputElement()
-        {
+        function getDataInputElement() {
           return document.getElementsByName("dataInput")[0];
         }
 
