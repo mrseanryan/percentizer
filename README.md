@@ -20,10 +20,12 @@ Press 'Go' and a percentile chart is rendered:
 
 ## How to Use
 
+On a Unix system (tested on Mac OS):
+
 ```
 ./build.sh
 
-open dist/chart.html
+open dist/index.html
 ```
 
 ## References
