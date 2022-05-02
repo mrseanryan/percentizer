@@ -173,20 +173,22 @@
         }
 
         function onDataChanged() {
-          var numbersAsText = getDataInputElement().value.split(",");
+          var numbersAsText = getDataInputElement().value.split(/[,.;\s]/)
+            .filter(t => t.length > 0);
           var data = parseNumbersAsText(numbersAsText);
 
           calculateAndRender(data);
         }
       </script>
 
-      <h3 id="po">Data (comma-separated numbers)</h3>
+      <h3 id="po">Data (whole numbers separated by spaces, new lines or ; or , or .)</h3>
       <form>
         <textarea
           class="data-input"
           name="dataInput"
           rows="20" cols="42">
-          1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+          1, 2, 3, 4, 5, 6 ; 7
+          8, 9. 10 11 12
         </textarea>
         <br />
         <input type="button" value="Go" onclick="onDataChanged()" />
