@@ -1,10 +1,18 @@
-# percentiler README
+# percentizer README
 
 tl,dr: percentalizes your data!
 
-Takes a raw data set, calculates percentiles and renders against a normal distribution curve with standard deviations.
+Works in a browser - no server side (node.js) needed to use.
 
-![percentalizer](/static/images/screenshot-percentiler-basic-chart.png)
+Takes a raw data set, `calculates percentiles and renders` against a normal distribution curve with standard deviations.
+
+Enter a list of numbers:
+
+![input data](/static/images/screenshot-percentiler-input.png)
+
+Press 'Go' and a percentile chart is rendered:
+
+![percentalizer](/static/images/screenshot-percentiler-rendered.png)
 
 ## Dependencies
 

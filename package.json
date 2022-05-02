@@ -1,5 +1,5 @@
 {
-  "name": "percentiler",
+  "name": "percentizer",
   "version": "0.1.0",
   "description": "tl,dr: percentalizes your data! Takes a raw data set, calculates percentiles and renders against a normal distribution curve with standard deviations.",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mrseanryan/percentalizer.git"
+    "url": "git+https://github.com/mrseanryan/percentizer.git"
   },
   "keywords": [
     "percentiles",
@@ -20,9 +20,9 @@
   "author": "str_ie (at)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mrseanryan/percentalizer/issues"
+    "url": "https://github.com/mrseanryan/percentizer/issues"
   },
-  "homepage": "https://github.com/mrseanryan/percentalizer#readme",
+  "homepage": "https://github.com/mrseanryan/percentizer#readme",
   "dependencies": {
     "chartnew.js": "^3.9.0",
     "percentile": "^1.6.0"
