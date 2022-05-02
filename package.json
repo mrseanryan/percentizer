@@ -1,7 +1,7 @@
 {
-  "name": "percentilezer",
+  "name": "percentiler",
   "version": "0.1.0",
-  "description": "Takes raw data set, calculates percentiles and renders against a normal distribution curve - tl;dr: percenalizes your data!",
+  "description": "tl,dr: percentalizes your data! Takes a raw data set, calculates percentiles and renders against a normal distribution curve with standard deviations.",
   "main": "index.js",
   "scripts": {
     "test": "npm test"
