@@ -1,0 +1,29 @@
+{
+  "name": "percentilezer",
+  "version": "0.1.0",
+  "description": "Takes raw data set, calculates percentiles and renders against a normal distribution curve - tl;dr: percenalizes your data!",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrseanryan/percentalizer.git"
+  },
+  "keywords": [
+    "percentiles",
+    "normal",
+    "distribution",
+    "chart",
+    "graph"
+  ],
+  "author": "str_ie (at)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrseanryan/percentalizer/issues"
+  },
+  "homepage": "https://github.com/mrseanryan/percentalizer#readme",
+  "dependencies": {
+    "chartnew.js": "^3.9.0"
+  }
+}

@@ -1,0 +1,87 @@
+  <!doctype html>
+
+<!--[if lte IE 8]><SCRIPT src='source/excanvas.js'></script><![endif]--><SCRIPT src='../node_modules/chartnew.js/ChartNew.js'></script>
+<SCRIPT src='../node_modules/chartnew.js/Add-ins/format.js'></script>
+
+<SCRIPT>
+
+defCanvasWidth=1200;
+defCanvasHeight=600;
+
+var mydata1 = {
+  labels : ["-3","-2","-1","0","1","2","3"],
+  xBegin : -3,
+  xEnd :  3,   
+	datasets : [
+		{
+			strokeColor : "rgba(220,220,220,1)",
+      data : [],
+      xPos : [],
+      title : "Normal distribution"
+		}
+	]
+}   
+var gauss_var=1;
+var gauss_mean=0;
+
+/* y-axis scaling
+- median / 0.4
+*/
+var median = 1300; // xxx
+var yAxisScale = median/0.4;
+
+var nbiter=400;
+for(var i=0;i<nbiter;i++)
+{
+  mydata1.datasets[0].xPos[i]=mydata1.xBegin+i*(mydata1.xEnd-mydata1.xBegin)/nbiter;
+  mydata1.datasets[0].data[i]=(1/(gauss_var*Math.sqrt(2*Math.PI))) * Math.exp(-((mydata1.datasets[0].xPos[i]-gauss_mean)*(mydata1.datasets[0].xPos[i]-gauss_mean))/(2*gauss_var));
+
+  mydata1.datasets[0].data[i] = mydata1.datasets[0].data[i] * yAxisScale;
+}  
+
+// Adjust x-axis labels to show percentile values:
+var sigmaSymbol = "σ";
+var percentilesByStdDev = [ 0, 100, 200, 500, 700, 800, 900 ]; // xxx
+for (var p=0; p<percentilesByStdDev.length; p++)
+{
+  mydata1.labels[p] = mydata1.labels[p] + sigmaSymbol + "\n" + percentilesByStdDev[p]
+}
+
+var opt1 = {
+      canvasBorders : true,
+      canvasBordersWidth : 3,
+      canvasBordersColor : "black",
+      graphTitle : "Normal distribution",
+      legend : true,
+      datasetFill : false,
+      annotateDisplay : true,
+      pointDot :false,
+      animationLeftToRight : true,
+      animationEasing: "linear",
+      yAxisMinimumInterval : 0.02 * yAxisScale,
+      graphTitleFontSize: 18
+
+}
+
+
+</SCRIPT>
+
+
+<html>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<head>
+		<title>Percentilezer</title>
+	</head>
+	<body>
+    <center>
+    <font SIZE=6><B>Percentiles</B></font>    <BR>
+    <script>
+
+    document.write("<canvas id=\"canvas_Line1\" height=\""+defCanvasHeight+"\" width=\""+defCanvasWidth+"\"></canvas>");
+window.onload = function() {
+    var myLine = new Chart(document.getElementById("canvas_Line1").getContext("2d")).Line(mydata1,opt1);
+}
+    </script>
+    </center>
+  </body>
+</html>
