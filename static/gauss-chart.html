@@ -1,111 +1,169 @@
-  <!doctype html>
+<!DOCTYPE html>
 
-<!--[if lte IE 8]><SCRIPT src='source/excanvas.js'></script><![endif]--><SCRIPT src='../node_modules/chartnew.js/ChartNew.js'></script>
-<SCRIPT src='../node_modules/chartnew.js/Add-ins/format.js'></script>
+<!--[if lte IE 8]><script src="source/excanvas.js"></script><![endif]-->
+<script src="../node_modules/chartnew.js/ChartNew.js"></script>
+<script src="../node_modules/chartnew.js/Add-ins/format.js"></script>
 
 <script>
   var module = module || {};
 </script>
 
-<SCRIPT src='../node_modules/percentile/lib/index.js'></script>
+<script src="../node_modules/percentile/lib/index.js"></script>
 
-<SCRIPT>
+<script>
+  defCanvasWidth = 1200;
+  defCanvasHeight = 600;
 
-defCanvasWidth=1200;
-defCanvasHeight=600;
+  var defaultXAxisLabels = ["-3", "-2", "-1", "0", "1", "2", "3"];
 
-var mydata1 = {
-  labels : ["-3","-2","-1","0","1","2","3"],
-  xBegin : -3,
-  xEnd :  3,   
-	datasets : [
-		{
-			strokeColor : "rgba(220,220,220,1)",
-      data : [],
-      xPos : [],
-      title : "Normal distribution"
-		}
-	]
-}   
-var gauss_var=1;
-var gauss_mean=0;
+  function clone(data)
+  {
+    return JSON.parse(JSON.stringify(data))
+  }
 
-var data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // xxx
+  var mydata1 = {
+    labels: clone(defaultXAxisLabels),
+    xBegin: -3,
+    xEnd: 3,
+    datasets: [
+      {
+        strokeColor: "rgba(220,220,220,1)",
+        data: [],
+        xPos: [],
+        title: "Normal distribution",
+      },
+    ],
+  };
+  var gauss_var = 1;
+  var gauss_mean = 0;
 
-// PERCENTILE CALC
-const deviationsAndPercentages = [
-  {stdDev: -3, pc: 0.1},
-  {stdDev: -2, pc: 50 - 34.1 - 13.6},
-  {stdDev: -1, pc: 50 - 34.1},
-  {stdDev: 0, pc: 50},
-  {stdDev: 1, pc: 50 + 34.1},
-  {stdDev: 2, pc: 50 + 34.1 + 13.6},
-  {stdDev: 3, pc: 99.9}
-];
+  function calculate(data) {
+    // PERCENTILE CALC
+    const deviationsAndPercentages = [
+      { stdDev: -3, pc: 0.1 },
+      { stdDev: -2, pc: 50 - 34.1 - 13.6 },
+      { stdDev: -1, pc: 50 - 34.1 },
+      { stdDev: 0, pc: 50 },
+      { stdDev: 1, pc: 50 + 34.1 },
+      { stdDev: 2, pc: 50 + 34.1 + 13.6 },
+      { stdDev: 3, pc: 99.9 },
+    ];
 
-// xxx const percentile = require("percentile");
-const percentages = deviationsAndPercentages.map(dap => dap.pc);
-const percentilesByStdDev = percentile(
-  percentages, // calculates percentiles for standard deviation -3 sigma thru to +3 sigma
-  data
-);
+    // xxx const percentile = require("percentile");
+    const percentages = deviationsAndPercentages.map((dap) => dap.pc);
+    const percentilesByStdDev = percentile(
+      percentages, // calculates percentiles for standard deviation -3 sigma thru to +3 sigma
+      data
+    );
 
-/* y-axis scaling
+    /* y-axis scaling
 - median / 0.4
 */
-var median = percentilesByStdDev[3];
-var yAxisScale = median/0.4;
+    var median = percentilesByStdDev[3];
+    var yAxisScale = median / 0.4;
 
-var nbiter=400;
-for(var i=0;i<nbiter;i++)
-{
-  mydata1.datasets[0].xPos[i]=mydata1.xBegin+i*(mydata1.xEnd-mydata1.xBegin)/nbiter;
-  mydata1.datasets[0].data[i]=(1/(gauss_var*Math.sqrt(2*Math.PI))) * Math.exp(-((mydata1.datasets[0].xPos[i]-gauss_mean)*(mydata1.datasets[0].xPos[i]-gauss_mean))/(2*gauss_var));
+    var nbiter = 400;
+    for (var i = 0; i < nbiter; i++) {
+      mydata1.datasets[0].xPos[i] =
+        mydata1.xBegin + (i * (mydata1.xEnd - mydata1.xBegin)) / nbiter;
+      mydata1.datasets[0].data[i] =
+        (1 / (gauss_var * Math.sqrt(2 * Math.PI))) *
+        Math.exp(
+          -(
+            (mydata1.datasets[0].xPos[i] - gauss_mean) *
+            (mydata1.datasets[0].xPos[i] - gauss_mean)
+          ) /
+            (2 * gauss_var)
+        );
 
-  mydata1.datasets[0].data[i] = mydata1.datasets[0].data[i] * yAxisScale;
-}  
+      mydata1.datasets[0].data[i] = mydata1.datasets[0].data[i] * yAxisScale;
+    }
 
-// Adjust x-axis labels to show percentile values:
-var sigmaSymbol = "σ";
-for (var p=0; p<percentilesByStdDev.length; p++)
-{
-  mydata1.labels[p] = mydata1.labels[p] + sigmaSymbol + "\n" + percentilesByStdDev[p]
-}
+    // Adjust x-axis labels to show percentile values:
+    var sigmaSymbol = "σ";
+    for (var p = 0; p < percentilesByStdDev.length; p++) {
+      mydata1.labels[p] =
+      defaultXAxisLabels[p] + sigmaSymbol + "\n" + percentilesByStdDev[p];
+    }
 
-var opt1 = {
-      canvasBorders : true,
-      canvasBordersWidth : 3,
-      canvasBordersColor : "black",
-      graphTitle : "Normal distribution",
-      legend : true,
-      datasetFill : false,
-      annotateDisplay : true,
-      pointDot :false,
-      animationLeftToRight : true,
-      animationEasing: "linear",
-      yAxisMinimumInterval : 0.02 * yAxisScale,
-      graphTitleFontSize: 18
+    opt1.yAxisMinimumInterval = 0.02 * yAxisScale;
+  }
 
-}
-
-
-</SCRIPT>
+  var opt1 = {
+    canvasBorders: true,
+    canvasBordersWidth: 3,
+    canvasBordersColor: "black",
+    graphTitle: "Normal distribution",
+    legend: true,
+    datasetFill: false,
+    annotateDisplay: true,
+    pointDot: false,
+    animationLeftToRight: true,
+    animationEasing: "linear",
+    yAxisMinimumInterval: 0.02, // * yAxisScale,
+    graphTitleFontSize: 18,
+  };
+</script>
 
 <html>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-	<head>
-		<title>Percentilezer</title>
-	</head>
-	<body>
+  <head>
+    <title>Percentilezer</title>
+  </head>
+  <body>
     <center>
-    <font SIZE=6><B>Percentiles</B></font>    <BR>
-    <script>
+      <font size="6"><b>Percentiles</b></font> <br />
+      <script>
+        var myChart;
 
-    document.write("<canvas id=\"canvas_Line1\" height=\""+defCanvasHeight+"\" width=\""+defCanvasWidth+"\"></canvas>");
-window.onload = function() {
-    var myLine = new Chart(document.getElementById("canvas_Line1").getContext("2d")).Line(mydata1,opt1);
-}
-    </script>
+        function calculateAndRender(data) {
+          calculate(data);
+
+          var ctx = document.getElementById("canvas_Line1").getContext("2d");
+
+          if (myChart) updateChart(ctx, mydata1, opt1, true, true);
+          else {
+            myChart = new Chart(ctx);
+            myChart.Line(mydata1, opt1);
+          }
+        }
+
+        document.write(
+          '<canvas id="canvas_Line1" height="' +
+            defCanvasHeight +
+            '" width="' +
+            defCanvasWidth +
+            '"></canvas>'
+        );
+        window.onload = function () {
+          onDataChanged();
+        };
+      </script>
+
+      <script>
+        function onDataChanged() {
+          var inputElem = document.getElementsByName("dataInput")[0];
+          var numbersAsText = inputElem.value.split(",");
+          var data = [];
+          for (var i = 0; i < numbersAsText.length; i++) {
+            var datum = parseInt(numbersAsText[i], 10);
+            if (isNaN(datum)) throw `${data[i]} is not a number!`;
+            data[i] = datum;
+          }
+
+          calculateAndRender(data);
+        }
+      </script>
+
+      <h3 id="po">Data</h3>
+      <form>
+        <input
+          type="text"
+          name="dataInput"
+          value="1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
+        /><br />
+        <input type="button" value="Go" onclick="onDataChanged()" />
+      </form>
     </center>
   </body>
 </html>
