@@ -180,14 +180,15 @@
         }
       </script>
 
-      <h3 id="po">Data</h3>
+      <h3 id="po">Data (comma-separated numbers)</h3>
       <form>
-        <input
+        <textarea
           class="data-input"
-          type="text"
           name="dataInput"
-          value="1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
-        /><br />
+          rows="20" cols="42">
+          1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+        </textarea>
+        <br />
         <input type="button" value="Go" onclick="onDataChanged()" />
       </form>
     </center>
