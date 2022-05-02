@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 
+<style>
+  .data-input:invalid {
+      border: solid 1px red;
+  }
+</style>
+
 <script src="../node_modules/chartnew.js/ChartNew.js"></script>
 <script src="../node_modules/chartnew.js/Add-ins/format.js"></script>
 
@@ -138,19 +144,33 @@
       </script>
 
       <script>
+        function setValidationMessage(message)
+        {
+          getDataInputElement().setCustomValidity(message);
+        }
+
         function parseNumbersAsText(numbersAsText) {
           var data = [];
+          setValidationMessage("");
           for (var i = 0; i < numbersAsText.length; i++) {
             var datum = parseInt(numbersAsText[i], 10);
-            if (isNaN(datum)) throw `${data[i]} is not a number!`;
+            if (isNaN(datum))
+            {
+              setValidationMessage(`${data[i]} is not a number!`);
+              return data;
+            }
             data[i] = datum;
           }
           return data;
         }
 
+        function getDataInputElement()
+        {
+          return document.getElementsByName("dataInput")[0];
+        }
+
         function onDataChanged() {
-          var inputElem = document.getElementsByName("dataInput")[0];
-          var numbersAsText = inputElem.value.split(",");
+          var numbersAsText = getDataInputElement().value.split(",");
           var data = parseNumbersAsText(numbersAsText);
 
           calculateAndRender(data);
@@ -160,6 +180,7 @@
       <h3 id="po">Data</h3>
       <form>
         <input
+          class="data-input"
           type="text"
           name="dataInput"
           value="1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
