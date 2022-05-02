@@ -3,6 +3,12 @@
 <!--[if lte IE 8]><SCRIPT src='source/excanvas.js'></script><![endif]--><SCRIPT src='../node_modules/chartnew.js/ChartNew.js'></script>
 <SCRIPT src='../node_modules/chartnew.js/Add-ins/format.js'></script>
 
+<script>
+  var module = module || {};
+</script>
+
+<SCRIPT src='../node_modules/percentile/lib/index.js'></script>
+
 <SCRIPT>
 
 defCanvasWidth=1200;
@@ -24,10 +30,30 @@ var mydata1 = {
 var gauss_var=1;
 var gauss_mean=0;
 
+var data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // xxx
+
+// PERCENTILE CALC
+const deviationsAndPercentages = [
+  {stdDev: -3, pc: 0.1},
+  {stdDev: -2, pc: 50 - 34.1 - 13.6},
+  {stdDev: -1, pc: 50 - 34.1},
+  {stdDev: 0, pc: 50},
+  {stdDev: 1, pc: 50 + 34.1},
+  {stdDev: 2, pc: 50 + 34.1 + 13.6},
+  {stdDev: 3, pc: 99.9}
+];
+
+// xxx const percentile = require("percentile");
+const percentages = deviationsAndPercentages.map(dap => dap.pc);
+const percentilesByStdDev = percentile(
+  percentages, // calculates percentiles for standard deviation -3 sigma thru to +3 sigma
+  data
+);
+
 /* y-axis scaling
 - median / 0.4
 */
-var median = 1300; // xxx
+var median = percentilesByStdDev[3];
 var yAxisScale = median/0.4;
 
 var nbiter=400;
@@ -41,7 +67,6 @@ for(var i=0;i<nbiter;i++)
 
 // Adjust x-axis labels to show percentile values:
 var sigmaSymbol = "σ";
-var percentilesByStdDev = [ 0, 100, 200, 500, 700, 800, 900 ]; // xxx
 for (var p=0; p<percentilesByStdDev.length; p++)
 {
   mydata1.labels[p] = mydata1.labels[p] + sigmaSymbol + "\n" + percentilesByStdDev[p]
@@ -65,7 +90,6 @@ var opt1 = {
 
 
 </SCRIPT>
-
 
 <html>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />

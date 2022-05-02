@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/mrseanryan/percentalizer#readme",
   "dependencies": {
-    "chartnew.js": "^3.9.0"
+    "chartnew.js": "^3.9.0",
+    "percentile": "^1.6.0"
   }
 }
