@@ -18,9 +18,13 @@ Press 'Go' and a percentile chart is rendered:
 
 - npm
 
-### npm packages
+## How to Use
 
-chartnew.js
+```
+./build.sh
+
+open dist/chart.html
+```
 
 ## References
 https://github.com/FVANCOP/ChartNew.js
