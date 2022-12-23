@@ -4,7 +4,7 @@ tl,dr: percentalizes your data!
 
 Works in a browser - no server side (node.js) needed to use.
 
-[Deployed Here](https://master.d1pyrf9wfzhzkd.amplifyapp.com/) (via Amazon AWS Amplify)
+[Deployed Here](https://master.d1pyrf9wfzhzkd.amplifyapp.com/) (to Amazon AWS Amplify via a [Github App](https://docs.aws.amazon.com/amplify/latest/userguide/setting-up-GitHub-access.html))
 
 Takes a raw data set, `calculates percentiles and renders` against a normal distribution curve with standard deviations.
 
